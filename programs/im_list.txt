@@ -1,0 +1,25 @@
+main:
+    lw    $4, 0($0)              # DM 內積資料的結束位址
+    add   $5, $0, $0
+    add   $6, $0, $0             # 完成旗標
+    add.s $f1, $f0, $f0
+    add.s $f2, $f0, $f0
+    add.s $f3, $f0, $f0
+    add.s $f4, $f0, $f0          # accumulator = 0
+    j     loop
+
+loop:
+    beq   $5, $4, exit
+    addi  $5, $5, 4
+    lwc1  $f1, 0($5)             # weight
+    addi  $5, $5, 4
+    lwc1  $f2, 0($5)             # input
+    mac.s $f4, $f2, $f1          # f4 = f4 + f2 * f1
+    j     loop
+
+exit:
+    swc1  $f4, 4($4)
+    addi  $6, $6, 1234
+
+mac.s 使用 SPECIAL2 opcode 0x1c、funct 0x3e。
+im.txt 後方以 NOP 補到 50 words，配合原課程 C 程式的載入方式。
