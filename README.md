@@ -4,7 +4,7 @@
 
 本專案以計算機組織課程提供的 5-stage MIPS processor 為基礎，針對 Fully Connected Deep Neural Network（FC-DNN）中大量的浮點乘加運算進行優化。處理器維持 IF、ID、EX、MEM 與 WB 五階段 pipeline，並加入自訂 MAC 指令、data forwarding 及 pipeline interlock，以減少資料相依造成的 NOP 與等待週期。
 
-在 1023 次浮點乘加測試中，執行週期由 baseline 的 **25,595 cycles** 降至優化後的 **10,249 cycles**，減少 **59.96%**，以 cycle count 計算的 speedup 為 **2.50×**。另以課程提供的 784-64-10 MNIST 模型執行單張影像推論，預測結果為 **7**，與正確標籤一致。
+在 1023 次浮點乘加測試中，執行週期由 baseline 的 **25,595 cycles** 降至優化後的 **10,249 cycles**，減少 **59.96%**，以 cycle count 計算的 speedup 為 **2.50×**。另外，也以課程提供的 784-64-10 MNIST 模型執行單張影像推論，預測結果為 **7**，與預期一致。
 
 ## 架構優化
 
@@ -14,7 +14,7 @@
 
 ### Data Forwarding
 
-Forwarding unit 會檢查 EX/MEM 與 MEM/WB 階段的目的暫存器，將可用的運算結果直接送往 EX stage，減少等待 write back 的需求。兩個階段同時符合轉送條件時，優先選擇較新的 EX/MEM 結果；整數與浮點暫存器分開比對，避免錯誤轉送。
+Forwarding unit 會檢查 EX/MEM 與 MEM/WB 階段的目的暫存器，將可用的運算結果直接送往 EX stage，減少等待 write back 的需求。兩個階段同時符合 Forwarding 條件時，優先選擇較新的 EX/MEM 結果；整數與浮點暫存器分開比對，避免錯誤 Forwarding。
 
 ### Pipeline Interlock
 
@@ -33,14 +33,10 @@ Load 指令的資料需到 MEM stage 才能取得。當後續指令立即使用�
 | 結果的 IEEE754 編碼 | `447fc000` | `447fc000` |
 | 測試結果 | PASS | PASS |
 
-執行週期減少比例為 `(25,595 − 10,249) / 25,595 = 59.96%`，cycle-count speedup 為 `25,595 / 10,249 ≈ 2.50×`。此比較呈現 MAC、forwarding、interlock 與指令程式調整的整體效果，不代表單一優化的個別貢獻。
+執行週期減少比例為 `(25,595 − 10,249) / 25,595 = 59.96%`，cycle-count speedup 為 `25,595 / 10,249 ≈ 2.50×`。
 
-Cycles 從 CPU 解除 reset 計算至完成旗標出現，不包含 testbench 載入指令及資料的時間。上述 speedup 是執行週期的比較，未納入合成後最高時脈與 critical path 的差異。
+Cycles 從 CPU 解除 reset 計算至完成 flag 出現，不包含 testbench 載入指令及資料的時間。
 
-<!-- 圖片位置：將 make compare 的 terminal 截圖存為 docs/images/mac-comparison.png。 -->
-![Baseline 與優化版乘加測試結果](docs/images/mac-comparison.png)
-
-圖 1：Baseline 與優化版皆得到相同的浮點累加結果。優化版使用較少的執行週期完成相同工作負載。
 
 ### Load-use Hazard 驗證
 
@@ -49,7 +45,7 @@ Cycles 從 CPU 解除 reset 計算至完成旗標出現，不包含 testbench �
 <!-- 圖片位置：將 GTKWave 截圖存為 docs/images/load-use-stall.png。
 保留 clk、rstn、fetch_pc、fetch_instr、stall、valid_dx，聚焦 C4A20000 後接 7001113E 的片段，包含前後數個 clock。
 -->
-![Load-use hazard 的 pipeline 波形](docs/images/load-use-stall.png)
+![Load-use hazard 的 pipeline 波形](images/load-use-stall.png)
 
 圖 2：`lwc1` 後接使用相同浮點暫存器的 `mac.s` 時，`stall` 拉高。在下一個 clock 上升緣，`fetch_pc` 保持不變，`valid_dx` 降為 0，表示 EX stage 插入一個 bubble。資料可用後，pipeline 恢復執行。
 
@@ -63,9 +59,9 @@ MNIST 模型具有 784 個輸入、一層 64-neuron hidden layer 與一層 10-ne
 PASS MNIST image=00000 prediction=7 cpu_cycles=509566
 ```
 
-預測類別 **7** 與正確標籤一致，兩層網路共 74 顆 neuron 的內積運算累計 **509,566 CPU cycles**。此數值不包含 testbench 的資料載入、bias、ReLU 與分類處理時間。本測試驗證單張影像的辨識流程，不作為完整 MNIST 測試集準確率或 MNIST 整體加速比的量測。
+預測類別 **7** 與正確標籤一致，兩層網路共 74 顆 neuron 的內積運算累計 **509,566 CPU cycles**。此數值不包含 testbench 的資料載入、bias、ReLU 與分類處理時間。本測試驗證單張影像的辨識流程，不作為完整 MNIST 測試集準確率量測。
 
-實驗紀錄分別位於 `results/baseline.log`、`results/mac.log`、`results/hazard.log`、`results/mac_wave.log` 與 `results/mnist.log`。
+實驗結果分別位於 `results/baseline.log`、`results/mac.log`、`results/hazard.log`、`results/mac_wave.log` 與 `results/mnist.log`。
 
 ## 專案結構
 
