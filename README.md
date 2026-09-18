@@ -40,14 +40,14 @@ Cycles 從 CPU 解除 reset 計算至完成 flag 出現，不包含 testbench �
 
 ### Load-use Hazard 驗證
 
-`hazard_tb.v` 的 load-use stall 與 forwarding 測試結果為 PASS。乘加測試中的優化版共記錄 1023 次 stall，對應內積迴圈中 load 後立即使用資料的情況；開啟波形輸出後，cycle count 與計算結果均與一般執行相同。
+`hazard_tb.v` 的 load-use stall 與 forwarding 測試結果為 PASS。乘加測試中的優化版共記錄 1023 次 stall，對應內積 loop 中 load 後立即使用資料的情況
 
 <!-- 圖片位置：將 GTKWave 截圖存為 docs/images/load-use-stall.png。
 保留 clk、rstn、fetch_pc、fetch_instr、stall、valid_dx，聚焦 C4A20000 後接 7001113E 的片段，包含前後數個 clock。
 -->
 ![Load-use hazard 的 pipeline 波形](images/load-use-stall.png)
 
-圖 2：`lwc1` 後接使用相同浮點暫存器的 `mac.s` 時，`stall` 拉高。在下一個 clock 上升緣，`fetch_pc` 保持不變，`valid_dx` 降為 0，表示 EX stage 插入一個 bubble。資料可用後，pipeline 恢復執行。
+圖中為 `lwc1` 後接使用相同浮點暫存器的 `mac.s` 時，`stall` 拉高。在下一個 clock 上升緣，`fetch_pc` 保持不變，`valid_dx` 降為 0，表示 EX stage 插入一個 bubble。資料可用後，pipeline 恢復執行。
 
 ### MNIST 推論結果
 
@@ -59,7 +59,7 @@ MNIST 模型具有 784 個輸入、一層 64-neuron hidden layer 與一層 10-ne
 PASS MNIST image=00000 prediction=7 cpu_cycles=509566
 ```
 
-預測類別 **7** 與正確標籤一致，兩層網路共 74 顆 neuron 的內積運算累計 **509,566 CPU cycles**。此數值不包含 testbench 的資料載入、bias、ReLU 與分類處理時間。本測試驗證單張影像的辨識流程，不作為完整 MNIST 測試集準確率量測。
+預測類別 **7** 與正確標籤一致，兩層網路共 74 顆 neuron 的內積運算累計 **509,566 CPU cycles**。此數值不包含 testbench 的資料載入、bias、ReLU 與分類處理時間。不過本測試驗證單張影像的辨識流程，無法作為完整 MNIST 測試集準確率量測。
 
 實驗結果分別位於 `results/baseline.log`、`results/mac.log`、`results/hazard.log`、`results/mac_wave.log` 與 `results/mnist.log`。
 
