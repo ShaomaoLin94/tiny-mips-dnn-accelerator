@@ -65,11 +65,6 @@ PASS MNIST image=00000 prediction=7 cpu_cycles=509566
 
 預測類別 **7** 與正確標籤一致，兩層網路共 74 顆 neuron 的內積運算累計 **509,566 CPU cycles**。此數值不包含 testbench 的資料載入、bias、ReLU 與分類處理時間。本測試驗證單張影像的辨識流程，不作為完整 MNIST 測試集準確率或 MNIST 整體加速比的量測。
 
-<!-- 圖片位置：將 make mnist 的 terminal 結果截圖存為 docs/images/mnist-result.png。 -->
-![MNIST 單張影像辨識結果](docs/images/mnist-result.png)
-
-圖 3：使用課程模型執行第 0 張 MNIST 影像推論，預測結果為 7，與標籤一致。`cpu_cycles` 記錄各 neuron 內積運算的 CPU 執行週期總和。
-
 實驗紀錄分別位於 `results/baseline.log`、`results/mac.log`、`results/hazard.log`、`results/mac_wave.log` 與 `results/mnist.log`。
 
 ## 專案結構
