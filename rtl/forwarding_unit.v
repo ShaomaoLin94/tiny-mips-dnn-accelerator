@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module forwarding_unit(
     input [4:0] src, dest_xm, dest_mw,
     input src_fp, src_used, write_xm, write_mw, fp_xm, fp_mw, load_xm,

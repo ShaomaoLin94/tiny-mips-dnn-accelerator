@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module fp_rf(
     input clk, rstn, write_en,
     input [4:0] addr_a, addr_b, addr_c, write_addr,

@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module sram(addra, clka, dina, douta, ena, wea,addr_out);
 	
 	input clka, ena, wea;

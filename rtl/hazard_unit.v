@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module hazard_unit(
     input valid_id,
     input [4:0] src_a, src_b, src_c, dest_dx,

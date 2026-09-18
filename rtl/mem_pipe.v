@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module mem_pipe(
     input clk, rstn, valid_xm, mem_write_xm,
     input [31:0] address_xm, store_data_xm,

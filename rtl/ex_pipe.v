@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "isa.vh"
 
 module ex_pipe(

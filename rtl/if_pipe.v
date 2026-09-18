@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module if_pipe(
     input clk, rstn, stall, redirect,
     input [31:0] redirect_pc,

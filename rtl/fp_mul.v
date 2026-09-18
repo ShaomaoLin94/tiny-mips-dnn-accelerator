@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module fp_mul(
   input s_axis_a_tvalid,
 	input [31:0]s_axis_a_tdata,

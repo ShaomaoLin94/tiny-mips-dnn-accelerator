@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module cpu_top(
     input clk, rstn,
     input [4:0] ahb_rf_addr,

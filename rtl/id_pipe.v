@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module id_pipe(
     input clk, rstn, write_en, write_fp,
     input [4:0] src_a, src_b, src_c, write_addr, ahb_rf_addr,
