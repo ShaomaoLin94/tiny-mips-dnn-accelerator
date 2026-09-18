@@ -2,9 +2,9 @@
 
 ## 專案簡介
 
-本專案以 5-stage MIPS processor 為基礎，針對 Fully Connected Deep Neural Network（FC-DNN）中大量的浮點乘加運算進行加速。處理器維持 IF、ID、EX、MEM 與 WB 五階段 pipeline，並加入自訂 MAC 指令、data forwarding 及 pipeline interlock，以減少資料相依造成的 NOP 與等待週期。
+本專案以計算機組織課程提供的 5-stage MIPS processor 為基礎，針對 Fully Connected Deep Neural Network（FC-DNN）中大量的浮點乘加運算進行加速。處理器維持 IF、ID、EX、MEM 與 WB 五階段 pipeline，並加入自訂 MAC 指令、data forwarding 及 pipeline interlock，以減少資料相依造成的 NOP 與等待週期。
 
-專案使用課程提供的 784-64-10 MNIST 模型進行 RTL simulation。MIPS processor 負責各層 neuron 的內積運算，testbench 則依照原始辨識流程處理 bias、ReLU 與輸出分類，最後取得手寫數字的預測結果。
+專案使用課程提供的 784-64-10 MNIST 模型進行 RTL simulation。MIPS processor 負責各層 neuron 的 inner product 運算，testbench 則依照原始辨識流程處理 bias、ReLU 與輸出分類，最後取得手寫數字的預測結果。
 
 ## 架構優化
 
